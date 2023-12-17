@@ -1,18 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Home\Index as HomeIndex;
+use App\Livewire\Auth\Login as AuthLogin;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::redirect('/', '/home');
+Route::get('/login', AuthLogin::class)->name('login');
+Route::get('/home', HomeIndex::class)->name('home.index');
