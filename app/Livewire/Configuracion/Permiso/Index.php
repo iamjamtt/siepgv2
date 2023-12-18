@@ -14,6 +14,7 @@ class Index extends Component {
 
     #[Url('buscar')]
     public $search = '';
+    #[Url('paginar')]
     public $paginate = 10;
 
     // variables para el modal
