@@ -14,15 +14,16 @@
                 data-kt-scroll-save-state="true">
                 <div class="mb-5 px-5 d-flex flex-column gap-4">
                     <div class="symbol symbol-100px text-center">
-                        <img src="assets/media/avatars/300-6.jpg" alt="" />
+                        <img src="{{ $usuario->avatar_path ? asset($usuario->avatar_path) : $usuario->avatar }}"
+                            alt="avatar" />
                     </div>
                     <span class="fs-2 fw-bold text-center">
-                        Jamt Mendoza
+                        {{ $usuario->nombre }}
                     </span>
                     <span class="badge badge-light-primary py-3 d-flex justify-content-center fs-7">
                         Administrador
                     </span>
-                    <button type="button"
+                    <button type="button" wire:click="logout"
                         class="btn btn-flex flex-center btn-secondary btn-custom text-nowrap px-0 h-40px w-100">
                         <span class="btn-label">
                             Cerrar sesión
@@ -40,7 +41,8 @@
                     </div>
 
                     <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('home.index') ? 'active' : '' }}" href="">
+                        <a class="menu-link {{ request()->routeIs('home.index') ? 'active' : '' }}"
+                            href="{{ route('home.index') }}">
                             <span class="menu-icon">
                                 <i class="ki-outline ki-home fs-2"></i>
                             </span>
@@ -50,25 +52,40 @@
                         </a>
                     </div>
 
-                    {{-- <div data-kt-menu-trigger="click" class="menu-item here show menu-accordion">
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item here {{ request()->routeIs('rol.index') || request()->routeIs('permiso.index') ? 'show' : '' }} menu-accordion">
                         <span class="menu-link">
                             <span class="menu-icon">
-                                <i class="ki-outline ki-element-11 fs-2"></i>
+                                <i class="ki-outline ki-setting-3 fs-2"></i>
                             </span>
-                            <span class="menu-title">Dashboards</span>
+                            <span class="menu-title">Configuración</span>
                             <span class="menu-arrow"></span>
                         </span>
                         <div class="menu-sub menu-sub-accordion">
                             <div class="menu-item">
-                                <a class="menu-link active" href="index.html">
+                                <a class="menu-link {{ request()->routeIs('rol.index') ? 'active' : '' }}"
+                                    href="{{ route('rol.index') }}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
-                                    <span class="menu-title">Default</span>
+                                    <span class="menu-title">
+                                        Roles
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a class="menu-link {{ request()->routeIs('permiso.index') ? 'active' : '' }}"
+                                    href="{{ route('permiso.index') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">
+                                        Permisos
+                                    </span>
                                 </a>
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
                 </div>
             </div>
         </div>

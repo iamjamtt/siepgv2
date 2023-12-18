@@ -20,11 +20,22 @@ class Usuario extends Authenticatable
         'password',
         'avatar_path',
         'rol_id',
-        'perfil_id',
+        'persona_id',
         'estado'
     ];
 
     public function rol(): BelongsTo {
         return $this->belongsTo(Rol::class, 'rol_id');
+    }
+
+    public function persona(): BelongsTo {
+        return $this->belongsTo(Persona::class, 'persona_id');
+    }
+
+    public function getAvatarAttribute(): string {
+        if ($this->avatar_path) {
+            return $this->avatar_path;
+        }
+        return $this->avatar_path ?? 'https://ui-avatars.com/api/?name=' . $this->nombre . '&size=64&&color=FFFFFF&background=3F83F8&bold=true';
     }
 }
