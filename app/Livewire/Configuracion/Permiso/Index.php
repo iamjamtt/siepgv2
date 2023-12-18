@@ -14,6 +14,7 @@ class Index extends Component {
 
     #[Url('buscar')]
     public $search = '';
+    public $paginate = 10;
 
     // variables para el modal
     public $titulo_modal = 'Crear Permiso';
@@ -21,8 +22,10 @@ class Index extends Component {
     public $permiso_id;
 
     // variables para el formulario
-    #[Validate('required|unique:permisos,nombre')]
+    #[Validate('required|unique:permiso,nombre')]
     public $nombre;
+    #[Validate('boolean')]
+    public $estado = true;
 
     public function modo() {
         $this->limpiar_modal();
@@ -36,25 +39,40 @@ class Index extends Component {
             'modo_modal',
             'permiso_id',
             'nombre',
+            'estado',
         ]);
         $this->resetErrorBag();
         $this->resetValidation();
+    }
+
+    public function editar($permiso_id) {
+        $this->limpiar_modal();
+        $this->modo_modal = 'edit';
+        $this->titulo_modal = 'Editar Permiso';
+        $permiso = Permiso::find($permiso_id);
+        $this->permiso_id = $permiso->id;
+        $this->nombre = $permiso->nombre;
+        $this->estado = $permiso->estado == 1 ? true : false;
     }
 
     public function guardar() {
         // validamos los datos
         if ($this->modo_modal == 'create') {
             $this->validate([
-                'nombre' => 'required|unique:permiso,nombre'
+                'nombre' => 'required|unique:permiso,nombre',
+                'estado' => 'boolean'
             ]);
         } else {
             $this->validate([
-                'nombre' => 'required|unique:permiso,nombre,' . $this->permiso_id . ',id'
+                'nombre' => 'required|unique:permiso,nombre,' . $this->permiso_id . ',id',
+                'estado' => 'boolean'
             ]);
         }
+        // guardamos los datos
         if ($this->modo_modal == 'create') {
             $permiso = new Permiso();
             $permiso->nombre = $this->nombre;
+            $permiso->estado = $this->estado;
             $permiso->save();
             // Mostramos mensaje en toast
             $this->dispatch('toast',
@@ -65,6 +83,7 @@ class Index extends Component {
         } else {
             $permiso = Permiso::find($this->permiso_id);
             $permiso->nombre = $this->nombre;
+            $permiso->estado = $this->estado;
             $permiso->save();
             // Mostramos mensaje en toast
             $this->dispatch('toast',
@@ -78,10 +97,36 @@ class Index extends Component {
             modal: '#modal-permiso',
             action: 'hide'
         );
+        // limpiar formulario
+        $this->limpiar_modal();
+    }
+
+    public function delete($permiso_id) {
+        // verificamos si el permiso tiene roles asignados
+        $permiso = Permiso::find($permiso_id);
+        if ($permiso->roles->count() > 0) {
+            // Mostramos mensaje en toast
+            $this->dispatch('toast',
+                tipo: 'error',
+                titulo: 'Error',
+                mensaje: 'El permiso no se puede eliminar porque tiene roles asignados.',
+            );
+        } else {
+            // eliminamos el permiso
+            $permiso->delete();
+            // Mostramos mensaje en toast
+            $this->dispatch('toast',
+                tipo: 'success',
+                titulo: 'Exito',
+                mensaje: 'Permiso eliminado correctamente.',
+            );
+        }
     }
 
     public function render() {
-        $permisos = Permiso::paginate(15);
+        $permisos = Permiso::search($this->search)
+            ->orderBy('created_at', 'desc')
+            ->paginate($this->paginate ?? 10);
         return view('livewire.configuracion.permiso.index', [
             'permisos' => $permisos,
         ]);
