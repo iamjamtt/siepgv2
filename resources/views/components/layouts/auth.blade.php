@@ -23,7 +23,6 @@
 </head>
 
 <body id="kt_body" class="app-blank">
-
     <script>
         var defaultThemeMode = "light"; var themeMode;
         if ( document.documentElement ) {
@@ -45,81 +44,31 @@
 
     <div class="d-flex flex-column flex-root" id="kt_app_root">
         <div class="d-flex flex-column flex-lg-row flex-column-fluid">
-            <div class="d-flex flex-column flex-lg-row-fluid w-lg-50 p-10 order-2 order-lg-1">
-                <div class="d-flex flex-center flex-column flex-lg-row-fluid">
-                    <div class="w-lg-500px p-10">
-                        <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form"
-                            data-kt-redirect-url="index.html" action="#">
-                            <div class="text-center mb-11">
-                                <h1 class="text-gray-900 fw-bolder mb-3">
-                                    Ingresa a tu cuenta
-                                </h1>
-                                <div class="text-gray-500 fw-semibold fs-6">
-                                    Sistema Integrado de Escuela de Posgrado
-                                </div>
-                            </div>
+            <livewire:auth.login>
 
-                            <div class="mb-8">
-                                <label for="correo_electronico" class="required form-label">
-                                    Correo electrónico
-                                </label>
-                                <div class="input-group">
-                                    <span class="input-group-text" id="basic-addon1">
-                                        <i class="ki-outline ki-sms fs-1"></i>
-                                    </span>
-                                    <input type="email" class="form-control" placeholder="Ingrese su correo electrónico"
-                                        name="correo_electronico" id="correo_electronico" />
-                                </div>
-                            </div>
+                <div class="d-flex flex-lg-row-fluid w-lg-50 bgi-size-cover bgi-position-center order-1 order-lg-2"
+                    style="background-image: url({{ asset('assets/media/auth/bg10-dark.jpeg') }})">
+                    <div class="d-flex flex-column flex-center py-7 py-lg-15 px-5 px-md-15 w-100">
 
-                            <div class="mb-8">
-                                <label for="contraseña" class="required form-label">
-                                    Contraseña
-                                </label>
-                                <div class="input-group">
-                                    <span class="input-group-text" id="basic-addon1">
-                                        <i class="ki-outline ki-lock-3 fs-1"></i>
-                                    </span>
-                                    <input type="password" class="form-control" placeholder="Ingrese su contraseña"
-                                        name="contraseña" id="contraseña" />
-                                </div>
-                            </div>
+                        <a href="index.html" class="mb-0 mb-lg-12">
+                            <img alt="Logo" src="{{ asset('assets/media/logo-pg.png') }}" class="h-50px h-lg-150px" />
+                        </a>
 
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">
-                                    <span class="indicator-label">
-                                        Ingresar
-                                    </span>
-                                </button>
-                            </div>
-                        </form>
+                        <h1 class="d-none d-lg-block text-white fs-2hx fw-bolder text-center mb-7">
+                            Bienvenido a Siepg
+                        </h1>
+
+                        <div class="d-none d-lg-block text-white fs-5 text-center">
+                            Sistema Integrado de Escuela de Posgrado
+                            <br>
+                            de la
+                            <br>
+                            <span class="text-warning">
+                                Universidad Nacional de Ucayali
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="d-flex flex-lg-row-fluid w-lg-50 bgi-size-cover bgi-position-center order-1 order-lg-2"
-                style="background-image: url({{ asset('assets/media/auth/bg10-dark.jpeg') }})">
-                <div class="d-flex flex-column flex-center py-7 py-lg-15 px-5 px-md-15 w-100">
-
-                    <a href="index.html" class="mb-0 mb-lg-12">
-                        <img alt="Logo" src="{{ asset('assets/media/logo-pg.png') }}" class="h-50px h-lg-150px" />
-                    </a>
-
-                    <h1 class="d-none d-lg-block text-white fs-2hx fw-bolder text-center mb-7">
-                        Bienvenido a Siepg
-                    </h1>
-
-                    <div class="d-none d-lg-block text-white fs-5 text-center">
-                        Sistema Integrado de Escuela de Posgrado
-                        <br>
-                        de la
-                        <br>
-                        <span class="text-warning">
-                            Universidad Nacional de Ucayali
-                        </span>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -134,6 +83,39 @@
 
     <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/custom/widgets.js') }}"></script>
+
+    <script>
+        document.addEventListener('livewire:navigated', () => {
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toastr-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            window.addEventListener('toast', event => {
+                if (event.detail.tipo == 'success') {
+                    toastr.success(event.detail.mensaje, event.detail.titulo);
+                } else if (event.detail.tipo == 'error') {
+                    toastr.error(event.detail.mensaje, event.detail.titulo);
+                } else if (event.detail.tipo == 'warning') {
+                    toastr.warning(event.detail.mensaje, event.detail.titulo);
+                } else if (event.detail.tipo == 'info') {
+                    toastr.info(event.detail.mensaje, event.detail.titulo);
+                }
+            })
+        })
+    </script>
 </body>
 
 </html>
