@@ -28,12 +28,13 @@
     data-kt-app-sidebar-push-footer="true" data-kt-app-footer-fixed="true" class="app-default">
 
     <script>
-        var defaultThemeMode = "light"; var themeMode;
-        if ( document.documentElement ) {
-            if ( document.documentElement.hasAttribute("data-bs-theme-mode")) {
+        var defaultThemeMode = "light";
+        var themeMode;
+        if (document.documentElement) {
+            if (document.documentElement.hasAttribute("data-bs-theme-mode")) {
                 themeMode = document.documentElement.getAttribute("data-bs-theme-mode");
             } else {
-                if ( localStorage.getItem("data-bs-theme") !== null ) {
+                if (localStorage.getItem("data-bs-theme") !== null) {
                     themeMode = localStorage.getItem("data-bs-theme");
                 } else {
                     themeMode = defaultThemeMode;
@@ -79,7 +80,6 @@
 
     <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/custom/widgets.js') }}"></script>
-
 
     <script>
         document.addEventListener('livewire:navigated', () => {

@@ -22,15 +22,17 @@
     </script>
 </head>
 
-<body  id="kt_app_body" data-kt-app-layout="dark-header" data-kt-app-header-fixed="true" data-kt-app-footer-fixed="true"  class="app-default">
+<body id="kt_app_body" data-kt-app-layout="dark-header" data-kt-app-header-fixed="true" data-kt-app-footer-fixed="true"
+    class="app-default">
 
     <script>
-        var defaultThemeMode = "light"; var themeMode;
-        if ( document.documentElement ) {
-            if ( document.documentElement.hasAttribute("data-bs-theme-mode")) {
+        var defaultThemeMode = "light";
+        var themeMode;
+        if (document.documentElement) {
+            if (document.documentElement.hasAttribute("data-bs-theme-mode")) {
                 themeMode = document.documentElement.getAttribute("data-bs-theme-mode");
             } else {
-                if ( localStorage.getItem("data-bs-theme") !== null ) {
+                if (localStorage.getItem("data-bs-theme") !== null) {
                     themeMode = localStorage.getItem("data-bs-theme");
                 } else {
                     themeMode = defaultThemeMode;
@@ -43,6 +45,8 @@
         }
     </script>
 
+    
+
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
 
@@ -54,6 +58,43 @@
 
     <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/custom/widgets.js') }}"></script>
+
+    <script>
+        document.addEventListener('livewire:navigated', () => {
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toastr-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            window.addEventListener('toast', event => {
+                if (event.detail.tipo == 'success') {
+                    toastr.success(event.detail.mensaje, event.detail.titulo);
+                } else if (event.detail.tipo == 'error') {
+                    toastr.error(event.detail.mensaje, event.detail.titulo);
+                } else if (event.detail.tipo == 'warning') {
+                    toastr.warning(event.detail.mensaje, event.detail.titulo);
+                } else if (event.detail.tipo == 'info') {
+                    toastr.info(event.detail.mensaje, event.detail.titulo);
+                }
+            })
+
+            window.addEventListener('modal', event => {
+                $(event.detail.modal).modal(event.detail.action);
+            })
+        })
+    </script>
 </body>
 
 </html>
