@@ -1,6 +1,13 @@
 <?php
 
+use App\Models\Admision;
 use App\Models\Usuario;
+
+function getProceso() {
+    $admision = Admision::where('estado', 1)->first();
+    $admision = 'PROCESO ' . $admision->codigo;
+    return $admision;
+}
 
 function formatFechaHora($fecha) {
     // hora en formato 12 horas y fecha en formato español

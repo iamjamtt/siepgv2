@@ -20,7 +20,7 @@
                     <div class="card card-dashed">
                         <div class="card-body">
                             <div class="card-px text-center py-md-10 my-5">
-                                <h2 class="fs-2hx fw-bold mb-5">
+                                <h2 class="fs-2qx mb-7" style="font-weight: 700">
                                     Bienvenidos al
                                     <br>
                                     Sistema Integrado de la Escuela de Posgrado
