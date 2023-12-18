@@ -55,7 +55,7 @@
                                 </div>
                                 <div class="d-flex align-items-center position-relative me-5">
                                     <i class="ki-outline ki-magnifier fs-3 position-absolute ms-5"></i>
-                                    <input type="text" data-kt-permissions-table-filter="search"
+                                    <input type="text" wire:model.live.debounce.500="search"
                                         class="form-control w-md-300px ps-13" placeholder="Buscar..." />
                                 </div>
                             </div>
@@ -89,41 +89,44 @@
                                     </thead>
                                     <tbody class="fw-semibold text-gray-800">
                                         @forelse ($permisos as $item)
-                                        <tr>
-                                            <td>
-                                                {{ $item->id }}
-                                            </td>
-                                            <td>
-                                                {{ $item->nombre }}
-                                            </td>
-                                            <td>
-                                                {{ formatFechaHora($item->created_at) }}
-                                            </td>
-                                            <td>
-                                                @if ($item->estado == 1)
-                                                <span class="badge badge-light-success py-2 px-3 fs-7">Activo</span>
-                                                @else
-                                                <span class="badge badge-light-danger py-2 px-3 fs-7">Inactivo</span>
-                                                @endif
-                                            </td>
-                                            <td class="text-end">
-                                                <button class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
-                                                    wire:click="editar({{ $item->id }})" data-bs-toggle="modal"
-                                                    data-bs-target="#modal-permiso">
-                                                    <i class="ki-outline ki-setting-3 fs-2"></i>
-                                                </button>
-                                                <button class="btn btn-icon btn-active-light-danger w-30px h-30px"
-                                                    wire:click="delete({{ $item->id }})">
-                                                    <i class="ki-outline ki-trash fs-2"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td>
+                                                    {{ $item->id }}
+                                                </td>
+                                                <td>
+                                                    {{ $item->nombre }}
+                                                </td>
+                                                <td>
+                                                    {{ formatFechaHora($item->created_at) }}
+                                                </td>
+                                                <td>
+                                                    @if ($item->estado == 1)
+                                                        <span
+                                                            class="badge badge-light-success py-2 px-3 fs-7">Activo</span>
+                                                    @else
+                                                        <span
+                                                            class="badge badge-light-danger py-2 px-3 fs-7">Inactivo</span>
+                                                    @endif
+                                                </td>
+                                                <td class="text-end">
+                                                    <button
+                                                        class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
+                                                        wire:click="editar({{ $item->id }})" data-bs-toggle="modal"
+                                                        data-bs-target="#modal-permiso">
+                                                        <i class="ki-outline ki-setting-3 fs-2"></i>
+                                                    </button>
+                                                    <button class="btn btn-icon btn-active-light-danger w-30px h-30px"
+                                                        wire:click="delete({{ $item->id }})">
+                                                        <i class="ki-outline ki-trash fs-2"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
                                         @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center py-20">
-                                                <span class="text-gray-600 fw-bold">No hay registros</span>
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td colspan="5" class="text-center py-20">
+                                                    <span class="text-gray-600 fw-bold">No hay registros</span>
+                                                </td>
+                                            </tr>
                                         @endforelse
                                     </tbody>
                                 </table>
@@ -132,24 +135,24 @@
                     </div>
                     {{-- paginacion --}}
                     @if ($permisos->hasPages())
-                    <div class="d-flex justify-content-between mt-5">
-                        <div class="d-flex align-items-center text-gray-700">
-                            Mostrando {{ $permisos->firstItem() }} - {{ $permisos->lastItem() }} de {{
-                            $permisos->total()}}
-                            registros
+                        <div class="d-flex justify-content-between mt-5">
+                            <div class="d-flex align-items-center text-gray-700">
+                                Mostrando {{ $permisos->firstItem() }} - {{ $permisos->lastItem() }} de
+                                {{ $permisos->total() }}
+                                registros
+                            </div>
+                            <div>
+                                {{ $permisos->links() }}
+                            </div>
                         </div>
-                        <div>
-                            {{ $permisos->links() }}
-                        </div>
-                    </div>
                     @else
-                    <div class="d-flex justify-content-between mt-5">
-                        <div class="d-flex align-items-center text-gray-700">
-                            Mostrando {{ $permisos->firstItem() }} - {{ $permisos->lastItem() }} de {{
-                            $permisos->total()}}
-                            registros
+                        <div class="d-flex justify-content-between mt-5">
+                            <div class="d-flex align-items-center text-gray-700">
+                                Mostrando {{ $permisos->firstItem() }} - {{ $permisos->lastItem() }} de
+                                {{ $permisos->total() }}
+                                registros
+                            </div>
                         </div>
-                    </div>
                     @endif
                 </div>
             </div>
@@ -170,44 +173,46 @@
                 <form autocomplete="off" wire:submit.prevent="guardar">
                     <div class="modal-body row g-5"">
                         <div class=" col-md-12">
-                        <label for="nombre" class="required form-label">
-                            Nombre
-                        </label>
-                        <input type="text" wire:model="nombre"
-                            class="form-control @error('nombre') is-invalid @enderror"
-                            placeholder="Ingrese el nombre del permiso" id="nombre" />
-                        @error('nombre')
-                        <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="col-md-12">
-                        <label for="estado" class="form-label">
-                            Estado
-                        </label>
-                        <div class="form-check form-switch form-check-custom">
-                            <input class="form-check-input" type="checkbox" id="estado" wire:model="estado" />
-                            <label class=" form-check-label" for="estado">
-                                Activo
+                            <label for="nombre" class="required form-label">
+                                Nombre
                             </label>
+                            <input type="text" wire:model="nombre"
+                                class="form-control @error('nombre') is-invalid @enderror"
+                                placeholder="Ingrese el nombre del permiso" id="nombre" />
+                            @error('nombre')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="col-md-12">
+                            <label for="estado" class="form-label">
+                                Estado
+                            </label>
+                            <div class="form-check form-switch form-check-custom">
+                                <input class="form-check-input" type="checkbox" id="estado"
+                                    wire:model="estado" />
+                                <label class=" form-check-label" for="estado">
+                                    Activo
+                                </label>
+                            </div>
                         </div>
                     </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal" wire:click="limpiar_modal">
-                    Cerrar
-                </button>
-                <button type="submit" class="btn btn-primary" style="width: 150px" wire:loading.attr="disabled"
-                    wire:target="guardar">
-                    <div wire:loading.remove wire:target="guardar">
-                        Guardar
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal"
+                            wire:click="limpiar_modal">
+                            Cerrar
+                        </button>
+                        <button type="submit" class="btn btn-primary" style="width: 150px"
+                            wire:loading.attr="disabled" wire:target="guardar">
+                            <div wire:loading.remove wire:target="guardar">
+                                Guardar
+                            </div>
+                            <div wire:loading wire:target="guardar">
+                                Procesando <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </div>
+                        </button>
                     </div>
-                    <div wire:loading wire:target="guardar">
-                        Procesando <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                    </div>
-                </button>
+                </form>
             </div>
-            </form>
         </div>
     </div>
-</div>
 </div>
