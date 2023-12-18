@@ -20,8 +20,9 @@
                     <span class="fs-2 fw-bold text-center">
                         {{ $usuario->nombre }}
                     </span>
-                    <span class="badge badge-light-primary py-3 d-flex justify-content-center fs-7">
-                        {{ $usuario->rol->nombre }}
+                    <span
+                        class="badge badge-light-{{ getRol($usuario->id)['color'] }} py-3 d-flex justify-content-center fs-7">
+                        {{ getRol($usuario->id)['nombre'] }}
                     </span>
                     <button type="button" wire:click="logout"
                         class="btn btn-flex flex-center btn-secondary btn-custom text-nowrap px-0 h-40px w-100">
