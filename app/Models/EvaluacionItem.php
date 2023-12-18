@@ -23,4 +23,21 @@ class EvaluacionItem extends Model
     public function evaluacion_titulo(): BelongsTo {
         return $this->belongsTo(EvaluacionTitulo::class, 'evaluacion_titulo_id');
     }
+
+    protected static function boot() {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->created_by = auth()->id();
+        });
+
+        static::updating(function ($model) {
+            $model->updated_by = auth()->id();
+        });
+
+        static::deleting(function ($model) {
+            $model->deleted_by = auth()->id();
+            $model->save();
+        });
+    }
 }

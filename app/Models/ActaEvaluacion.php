@@ -22,4 +22,21 @@ class ActaEvaluacion extends Model
     public function curricula(): BelongsTo {
         return $this->belongsTo(Curricula::class, 'curricula_id');
     }
+
+    protected static function boot() {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->created_by = auth()->id();
+        });
+
+        static::updating(function ($model) {
+            $model->updated_by = auth()->id();
+        });
+
+        static::deleting(function ($model) {
+            $model->deleted_by = auth()->id();
+            $model->save();
+        });
+    }
 }
